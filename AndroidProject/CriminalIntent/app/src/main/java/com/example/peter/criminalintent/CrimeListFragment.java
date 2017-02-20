@@ -1,5 +1,6 @@
 package com.example.peter.criminalintent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,14 +22,26 @@ import java.util.List;
 
 public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
+    private static final int REQUEST_CRIME = 1;
+    private  int selectActivity=0;
 
     private CrimeAdapter mAdapter;
 
     private void updateUI() {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
-        mAdapter = new CrimeAdapter(crimes);
-        mCrimeRecyclerView.setAdapter(mAdapter);
+        if (mAdapter == null) {
+            mAdapter = new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyItemChanged(selectActivity);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
     }
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
@@ -43,6 +57,7 @@ public class CrimeListFragment extends Fragment {
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
       //  public TextView mTitleTextView;
+
       private Crime mCrime;
       private TextView mTitleTextView;
         private TextView mDateTextView;
@@ -58,14 +73,31 @@ public class CrimeListFragment extends Fragment {
                     itemView.findViewById(R.id.list_item_crime_date_text_view);
            mSolvedCheckBox = (CheckBox)
                     itemView.findViewById(R.id.list_item_crime_solved_check_box);
+            mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+            {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+                {
+                    mSolvedCheckBox.setChecked(isChecked);
+                    mCrime.setSolved(isChecked);
+                }
+            });
         }
+
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(),
+            /*Toast.makeText(getActivity(),
                     mCrime.getTitle() + " clicked!", Toast.LENGTH_SHORT)
-                    .show();
+                    .show();*/
+            Intent intent = CrimeActivity.newIntent(getActivity(),
+                    mCrime.getId());
+          //  startActivity(intent);
+            startActivityForResult(intent, REQUEST_CRIME);
+            selectActivity=getAdapterPosition();
+
         }
+
         public void bindCrime(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
@@ -95,7 +127,9 @@ public class CrimeListFragment extends Fragment {
         public int getItemCount() {
             return mCrimes.size();
         }
+
     }
+
 
 
 }
