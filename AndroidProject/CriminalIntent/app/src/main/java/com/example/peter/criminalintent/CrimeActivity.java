@@ -10,7 +10,8 @@ import android.os.Bundle;
 import java.util.UUID;
 
 public class CrimeActivity extends SingleFragmentActivity {
-
+    private static final String EXTRA_CRIME_ID =
+            "com.example.peter.criminalintent.crime_id";
     @Override
     protected Fragment createFragment() {
       //  return new CrimeFragment();
@@ -19,8 +20,7 @@ public class CrimeActivity extends SingleFragmentActivity {
         return CrimeFragment.newInstance(crimeId);
     }
 
-    private static final String EXTRA_CRIME_ID =
-            "com.example.peter.criminalintent.crime_id";
+
 
     public static Intent newIntent(Context packageContext, UUID crimeId) {
         Intent intent = new Intent(packageContext, CrimeActivity.class);

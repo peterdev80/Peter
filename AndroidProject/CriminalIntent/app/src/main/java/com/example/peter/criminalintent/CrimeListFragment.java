@@ -28,13 +28,14 @@ public class CrimeListFragment extends Fragment {
     private CrimeAdapter mAdapter;
 
     private void updateUI() {
-        CrimeLab crimeLab = CrimeLab.get(getActivity());
+          CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
         if (mAdapter == null) {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
         } else {
-            mAdapter.notifyItemChanged(selectActivity);
+          //  mAdapter.notifyItemChanged(selectActivity);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -90,10 +91,13 @@ public class CrimeListFragment extends Fragment {
             /*Toast.makeText(getActivity(),
                     mCrime.getTitle() + " clicked!", Toast.LENGTH_SHORT)
                     .show();*/
-            Intent intent = CrimeActivity.newIntent(getActivity(),
-                    mCrime.getId());
+          /*  Intent intent = CrimeActivity.newIntent(getActivity(),
+                    mCrime.getId());*/
           //  startActivity(intent);
-            startActivityForResult(intent, REQUEST_CRIME);
+            Intent intent = CrimePagerActivity.newIntent(getActivity(),
+                    mCrime.getId());
+            startActivity(intent);
+           // startActivityForResult(intent, REQUEST_CRIME);
             selectActivity=getAdapterPosition();
 
         }
