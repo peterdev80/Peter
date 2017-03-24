@@ -11,4 +11,10 @@
     <string name="show_subtitle">Show Subtitle</string>
     <string name="hide_subtitle">Hide Subtitle</string>
     <string name="subtitle_format">%1$s crimes</string>
+    <string name="delete_btn_caption">Удалить</string>
+    <plurals name="subtitle_plural">
+        <item quantity="zero">%1$s null</item>
+        <item quantity="one">%1$s crime</item>
+        <item quantity="other">%1$s crimes</item>
+    </plurals>
 </resources>

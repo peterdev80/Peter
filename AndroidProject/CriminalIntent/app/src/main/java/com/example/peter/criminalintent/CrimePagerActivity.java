@@ -3,6 +3,7 @@ package com.example.peter.criminalintent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -22,16 +23,27 @@ public class CrimePagerActivity extends AppCompatActivity {
     private List<Crime> mCrimes;
     private static final String EXTRA_CRIME_ID =
             "com.example.peter.criminalintent.crime_id";
-    public static Intent newIntent(Context packageContext, UUID crimeId) {
+
+    private boolean mSubtitleVisible; //решение задачи для кнопки up
+
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        return CrimeListActivity.newIntent(CrimePagerActivity.this, mSubtitleVisible);
+    }
+
+    public static Intent newIntent(Context packageContext, UUID crimeId,boolean showSubtitle) {
         Intent intent = new Intent(packageContext, CrimePagerActivity.class);
         intent.putExtra(EXTRA_CRIME_ID, crimeId);
+        intent.putExtra(CrimeListFragment.SAVED_SUBTITLE_VISIBLE, showSubtitle);
         return intent;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crime_pager);
-
+        mSubtitleVisible = (boolean) getIntent().getBooleanExtra(CrimeListFragment
+                .SAVED_SUBTITLE_VISIBLE, false);
         UUID crimeId = (UUID) getIntent()
                 .getSerializableExtra(EXTRA_CRIME_ID);
 
