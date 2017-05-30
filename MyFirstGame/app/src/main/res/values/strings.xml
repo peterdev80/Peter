@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MyFirstGame</string>
+    <string name="action_settings">Settings</string>
+    <string name="men">Число меньше загадонного</string>
+    <string name="bol">Число больше загаданного</string>
+    <string name="vic">Вы угадали</string>
+</resources>
